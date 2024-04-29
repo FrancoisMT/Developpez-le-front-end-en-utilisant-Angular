@@ -1,6 +1,33 @@
-<h2>Medal per Country</h2>
+<div class="container">
 
-<div *ngIf="olympics$ | async as olympics">
-    <p>Number of JOs  {{ getNumberOfJOs(olympics) }}</p>
-    <p>Number of countries {{ olympics?.length }}</p>
+    <div class="title">
+        <h2>Medals per Country</h2>
+    </div>
+
+    <div *ngIf="olympics$ | async as olympics">
+        <div class="stats">
+            <div class="jo">
+                <p>Number of JOs</p>
+                <p><strong>{{ getTotalJOs(olympics) }}</strong></p>
+            </div>
+            <div class="country">
+                <p>Number of countries</p>
+                <p><strong>{{ getTotalCountries(olympics) }}</strong></p>
+            </div>
+        </div>
+        <div class="charts">
+            <ngx-charts-pie-chart 
+            [results]="pieChartsData" 
+            [scheme]="colorScheme" 
+            [labels]="true"
+            (select)="onChartClick($event)"
+            >
+            <ng-template #tooltipTemplate let-model="model">
+                <div class="chart-label">{{ model.name }}</div>
+                <div class="chart-label"><i class="fa-solid fa-award"></i> {{ model.value }}</div>
+            </ng-template>
+            </ngx-charts-pie-chart>
+        </div>
+    </div>
+
 </div>

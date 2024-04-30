@@ -4,4 +4,13 @@ export class PieChartsData {
     value !: number;
 }
 
+export class LineChartsData {
+    name !: string;
+    series !: LineChartDataSeries[];
+}
+
+export class LineChartDataSeries {
+    value !: number;
+    name !: string;
+}
 

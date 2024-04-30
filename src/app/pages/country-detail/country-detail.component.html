@@ -1,0 +1,47 @@
+<div class="container">
+
+    <ng-container *ngIf="olympic">
+
+        <div class="title">
+            <h2>{{ countryName }}</h2>
+        </div>
+
+        <div class="stats">
+            <div class="entries-number-stat">
+                <p>Number of entries</p>
+                <p><strong>{{ totalParticipations }}</strong></p>
+            </div>
+
+            <div class="total-medal-stat">
+                <p>Total number medals</p>
+                <p><strong>{{ totalMedals }}</strong></p>
+            </div>
+
+            <div class="total-athletes-stat">
+                <p>Total number of athletes</p>
+                <p><strong>{{ totalAthletes }}</strong></p>
+            </div>
+        </div>
+
+        <div class="chart">
+            <ngx-charts-line-chart class="graph" 
+            [results]="lineChartsData" 
+            [xAxis]="true" 
+            [yAxis]="true"
+            [xAxisLabel]="'Date'"
+            [yAxisLabel]="'Nombre de médailles'"
+            [showXAxisLabel]="true"      
+            [showYAxisLabel]="true"           
+            [legend]="false"      
+            >
+            </ngx-charts-line-chart>
+        </div>
+
+        <div class="back-button">
+            <button (click)="backToDashboard()">Retour</button> 
+        </div>
+
+    </ng-container>
+
+
+</div>

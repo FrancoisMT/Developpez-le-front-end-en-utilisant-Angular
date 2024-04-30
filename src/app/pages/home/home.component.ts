@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, map, of } from 'rxjs';
 import { PieChartsData } from 'src/app/core/models/ChartsData';
@@ -12,10 +13,11 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class HomeComponent implements OnInit {
 
-  public olympics$: Observable<Olympic[] | null> = of(null);
-  public pieChartsData !: PieChartsData[];
+  olympics$!: Observable<Olympic[] | null>
+  pieChartsData!: PieChartsData[];
+  loading: boolean = false;
 
-  constructor(private olympicService: OlympicService) { }
+  constructor(private olympicService: OlympicService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -85,7 +87,7 @@ export class HomeComponent implements OnInit {
 
     olympics.forEach((olympic) => {
       let data: PieChartsData = {
-        id : olympic.id,
+        id: olympic.id,
         name: olympic.country,
         value: 0
       };
@@ -104,11 +106,18 @@ export class HomeComponent implements OnInit {
     name: 'custom',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#956065', '#b8cbe7', '#89a1db', '#793d52', '#9780a1'] 
+    domain: ['#956065', '#b8cbe7', '#89a1db', '#793d52', '#9780a1']
   }
 
   public onChartClick(event: any) {
-    console.log(event);
+    const countryData = this.pieChartsData.find(data => data.name == event.name);
+
+    if (countryData) {
+      let countryId : number = countryData.id; 
+      let url : string = `/country-detail/`;
+      this.router.navigate([url, countryId]);
+    }
+
   }
 
 

@@ -1,0 +1,13 @@
+.error-banner {
+    margin: 2%;
+    display: flex;
+    justify-content: center;
+    color: whitesmoke;
+    background-color: rgb(186, 79, 79);
+    border-radius: 5px;
+}
+
+.error-banner .error-message {
+    padding: 1%;
+    margin: 0;
+}

@@ -19,6 +19,8 @@ export class CountryDetailComponent implements OnInit {
   totalMedals !: number;
   lineChartsData: LineChartsData[] = [];
   loading: boolean = false;
+  onError: boolean = false;
+  errorMessage: string = "";
 
   constructor(
     private service: OlympicService,
@@ -40,16 +42,23 @@ export class CountryDetailComponent implements OnInit {
    * Retrieve olympic data associated with the id in url
    */
   public getOlympicData() {
+    this.loading = true;
 
     this.service.getOlympics().subscribe((olympics) => {
       if (olympics) {
         this.olympic = olympics.find(olympic => olympic.id == this.id) || null;
         if (this.olympic) {
+          this.onError = false;
           this.countryName = this.olympic.country;
           this.setTotalValues(this.olympic);
           this.lineChartsData = [this.getLineChartData(this.olympic)];
+        } else {
+            this.onError = true;
+            this.errorMessage = "No data found";
         }
       }
+
+      this.loading = false;
     });
 
   }
@@ -83,7 +92,6 @@ export class CountryDetailComponent implements OnInit {
 
     olympic.participations.forEach((participation) => {
       let serie = new LineChartDataSeries();
-
       serie.name = (participation.year).toString();
       serie.value = participation.medalsCount;
 

@@ -1,5 +1,9 @@
 <div class="container">
 
+    <ng-container *ngIf="onError">
+        <app-error-banner [errorMessage]="errorMessage"></app-error-banner>
+    </ng-container>
+
     <ng-container *ngIf="olympic">
 
         <div class="title">
@@ -28,19 +32,22 @@
             [results]="lineChartsData" 
             [xAxis]="true" 
             [yAxis]="true"
-            [xAxisLabel]="'Date'"
-            [yAxisLabel]="'Nombre de médailles'"
-            [showXAxisLabel]="true"      
-            [showYAxisLabel]="true"           
-            [legend]="false"      
-            >
+            [xAxisLabel]="'Date'" 
+            [yAxisLabel]="'Nombre de médailles'" 
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true" 
+            [legend]="false">
             </ngx-charts-line-chart>
         </div>
+        
+    </ng-container>
+    
+    <div class="back-button">
+        <button (click)="backToDashboard()">Retour</button>
+    </div>
 
-        <div class="back-button">
-            <button (click)="backToDashboard()">Retour</button> 
-        </div>
-
+    <ng-container *ngIf="loading">
+        <app-custom-spinner></app-custom-spinner>
     </ng-container>
 
 

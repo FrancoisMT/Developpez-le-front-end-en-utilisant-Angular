@@ -1,10 +1,14 @@
 <div class="container">
 
-    <div class="title">
-        <h2>Medals per Country</h2>
-    </div>
+    <ng-container *ngIf="onError">
+        <app-error-banner [errorMessage]="errorMessage"></app-error-banner>
+    </ng-container>
 
     <div *ngIf="olympics$ | async as olympics">
+        <div class="title">
+            <h2>Medals per Country</h2>
+        </div>
+
         <div class="stats">
             <div class="jo">
                 <p>Number of JOs</p>
@@ -16,18 +20,19 @@
             </div>
         </div>
         <div class="charts">
-            <ngx-charts-pie-chart 
-            [results]="pieChartsData" 
-            [scheme]="colorScheme" 
-            [labels]="true"
-            (select)="onChartClick($event)"
-            >
-            <ng-template #tooltipTemplate let-model="model">
-                <div class="chart-label">{{ model.name }}</div>
-                <div class="chart-label"><i class="fa-solid fa-award"></i> {{ model.value }}</div>
-            </ng-template>
+            <ngx-charts-pie-chart [results]="pieChartsData" [scheme]="colorScheme" [labels]="true"
+                (select)="onChartClick($event)">
+                <ng-template #tooltipTemplate let-model="model">
+                    <div class="chart-label">{{ model.name }}</div>
+                    <div class="chart-label"><i class="fa-solid fa-award"></i> {{ model.value }}</div>
+                </ng-template>
             </ngx-charts-pie-chart>
         </div>
     </div>
+
+    <ng-container *ngIf="loading">
+        <app-custom-spinner></app-custom-spinner>
+    </ng-container>
+
 
 </div>

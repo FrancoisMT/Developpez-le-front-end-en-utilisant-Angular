@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
-import { Observable, map, of } from 'rxjs';
+import { Observable, Subscription, map, of, take } from 'rxjs';
 import { PieChartsData } from 'src/app/core/models/ChartsData';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
@@ -16,25 +16,37 @@ export class HomeComponent implements OnInit {
   olympics$!: Observable<Olympic[] | null>
   pieChartsData!: PieChartsData[];
   loading: boolean = false;
+  onError: boolean = false;
+  subscription!: Subscription;
+  errorMessage: string = "";
 
   constructor(private olympicService: OlympicService, private router: Router) { }
 
   ngOnInit(): void {
-
+    this.loading = true;
     this.olympics$ = this.olympicService.getOlympics();
+    
+    this.olympics$.pipe(
+      map((olympics) => {
+        if (olympics == null) {
+          return [];
+        }
+        return this.getPieChartsData(olympics);
+      })
+    ).subscribe(
+      {
+        next: (data: PieChartsData[]) => {
+          this.loading = false; 
+          this.pieChartsData = data;
+        },
+        error: (error: any) => {
+          this.errorMessage = error;
+          this.onError = true;
+          this.loading = false; 
+        }
+      }
 
-    if (this.olympics$) {
-      this.olympics$.pipe(
-        map((olympics) => {
-          if (olympics == null) {
-            return [];
-          }
-          return this.getPieChartsData(olympics);
-        })
-      ).subscribe((data) => {
-        this.pieChartsData = data;
-      });
-    }
+    );
 
   }
 
@@ -42,9 +54,8 @@ export class HomeComponent implements OnInit {
     * Returns the total number of unique countries from a list of Olympic objects.
     * @param olympics An array of Olympic objects.
     * @returns The total number of countries.
- */
+  */
   public getTotalCountries(olympics: Olympic[]): number {
-
     const countryId = new Set<number>();
 
     olympics.forEach((olympic) => {
@@ -113,8 +124,8 @@ export class HomeComponent implements OnInit {
     const countryData = this.pieChartsData.find(data => data.name == event.name);
 
     if (countryData) {
-      let countryId : number = countryData.id; 
-      let url : string = `/country-detail/`;
+      let countryId: number = countryData.id;
+      let url: string = `/country-detail/`;
       this.router.navigate([url, countryId]);
     }
 

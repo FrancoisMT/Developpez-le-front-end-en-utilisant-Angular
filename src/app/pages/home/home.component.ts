@@ -12,8 +12,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
-  olympics$!: Observable<Olympic[] | null>
+  olympics$!: Observable<Olympic[]>
   pieChartsData!: PieChartsData[];
   loading: boolean = false;
   onError: boolean = false;

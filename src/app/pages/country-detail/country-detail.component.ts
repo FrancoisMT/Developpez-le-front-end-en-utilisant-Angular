@@ -87,7 +87,6 @@ export class CountryDetailComponent implements OnInit {
     this.totalAthletes = totalAthletes;
   }
 
-
   public getLineChartData(olympic: Olympic): LineChartsData {
     let result = new LineChartsData();
     result.name = "";
@@ -104,7 +103,6 @@ export class CountryDetailComponent implements OnInit {
 
     return result;
   }
-
 
   public backToDashboard() {
     this.router.navigateByUrl("/");

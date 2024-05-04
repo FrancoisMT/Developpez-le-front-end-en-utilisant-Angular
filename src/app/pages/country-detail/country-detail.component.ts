@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineChartDataSeries, LineChartsData } from 'src/app/core/models/ChartsData';
 import { Olympic } from 'src/app/core/models/Olympic';
-import { Participation } from 'src/app/core/models/Participation';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 
 @Component({
@@ -45,17 +44,22 @@ export class CountryDetailComponent implements OnInit {
     this.loading = true;
 
     this.service.getOlympics().subscribe((olympics) => {
+
       if (olympics) {
         this.olympic = olympics.find(olympic => olympic.id == this.id) || null;
+
         if (this.olympic) {
           this.onError = false;
+          this.loading = false;
           this.countryName = this.olympic.country;
           this.setTotalValues(this.olympic);
           this.lineChartsData = [this.getLineChartData(this.olympic)];
         } else {
             this.onError = true;
+            this.loading = false;
             this.errorMessage = "No data found";
         }
+        
       }
 
       this.loading = false;

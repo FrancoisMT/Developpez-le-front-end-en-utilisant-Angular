@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { Observable, Subscription, map, of, take } from 'rxjs';
@@ -11,7 +11,7 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   olympics$!: Observable<Olympic[] | null>
   pieChartsData!: PieChartsData[];
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     this.loading = true;
     this.olympics$ = this.olympicService.getOlympics();
     
-    this.olympics$.pipe(
+    this.subscription = this.olympics$.pipe(
       map((olympics) => {
         if (olympics == null) {
           return [];
@@ -129,6 +129,12 @@ export class HomeComponent implements OnInit {
       this.router.navigate([url, countryId]);
     }
 
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 

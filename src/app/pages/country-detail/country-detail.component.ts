@@ -33,13 +33,15 @@ export class CountryDetailComponent implements OnInit {
 
     if (this.id) {
       this.getOlympicData();
+    } else {
+      this.router.navigateByUrl("**");
     }
 
   }
 
   /**
    * Retrieve olympic data associated with the id in url
-   */
+  */
   public getOlympicData() {
     this.loading = true;
 
@@ -55,18 +57,22 @@ export class CountryDetailComponent implements OnInit {
           this.setTotalValues(this.olympic);
           this.lineChartsData = [this.getLineChartData(this.olympic)];
         } else {
-            this.onError = true;
-            this.loading = false;
-            this.errorMessage = "No data found";
+          this.onError = true;
+          this.loading = false;
+          this.errorMessage = "No data found";
         }
-        
+
       }
 
       this.loading = false;
     });
-
   }
 
+  /**
+   * Sets the total values for an Olympic object, including the number of unique
+   * participations, the total count of medals, and the total count of athletes.
+   * @param olympic olympic The Olympic object
+  */
   public setTotalValues(olympic: Olympic) {
     let participations = new Set<number>();
     let totalMedals = 0;
@@ -87,6 +93,11 @@ export class CountryDetailComponent implements OnInit {
     this.totalAthletes = totalAthletes;
   }
 
+  /**
+   * Generates data for a line chart from the given Olympic object.
+   * @param olympic olympic The Olympic object 
+   * @returns A `LineChartsData` object representing the data for line chart graph.
+   */
   public getLineChartData(olympic: Olympic): LineChartsData {
     let result = new LineChartsData();
     result.name = "";
